@@ -4,7 +4,7 @@
  * @Phone: xxx
  * @Date: 2022-04-16 02:43:44
  * @LastEditors: kokutas
- * @LastEditTime: 2022-04-16 06:26:23
+ * @LastEditTime: 2022-04-16 06:41:07
  * @FilePath: /area/pkg/service/service.go
  * @Description: TODO
  * Copyright (c) 2022 by kokutas, All Rights Reserved.
@@ -53,9 +53,8 @@ func (b *basicAreaService) Get(ctx context.Context, request *area.GetRequest) (r
 	// TODO implement the business logic of Get
 	response = &area.GetReply{
 		Reply: &area.Reply{
-			Success: true,
-			Code:    int32(codes.OK),
-			Reason:  status.New(codes.OK, "").String(),
+			Code:   int64(codes.OK),
+			Reason: status.New(codes.OK, "").String(),
 		},
 		Areas: []*area.Area{
 			{

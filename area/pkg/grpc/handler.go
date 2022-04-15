@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 	"errors"
-	"net/http"
 
 	grpc "github.com/go-kit/kit/transport/grpc"
 	"github.com/kokutas/pb/area"
@@ -60,9 +59,8 @@ func encodeGetResponse(_ context.Context, r interface{}) (interface{}, error) {
 	reply := r.(endpoint.GetResponse)
 	return &area.GetReply{
 		Reply: &area.Reply{
-			Success: true,
-			Code:    http.StatusOK,
-			Reason:  "ok",
+			Code:   reply.Response.Reply.Code,
+			Reason: reply.Response.Reply.Reason,
 		},
 		Areas: reply.Response.Areas,
 	}, nil

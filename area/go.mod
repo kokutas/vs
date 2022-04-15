@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/go-kit/kit v0.12.0
-	github.com/kokutas/pb/area v0.0.0-20220415210031-0f13a581ef41
+	github.com/kokutas/pb/area v0.0.0-20220415223922-aad41df44fce
 	github.com/lightstep/lightstep-tracer-go v0.25.0
 	github.com/oklog/oklog v0.3.2
 	github.com/opentracing/opentracing-go v1.2.0

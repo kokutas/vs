@@ -1,0 +1,13 @@
+version: "2"
+services:
+  area:
+    build:
+      context: .
+      dockerfile: area/Dockerfile
+    restart: always
+    volumes:
+    - .:/go/src/vs
+    container_name: area
+    ports:
+    - 8800:8081
+    - 8801:8082

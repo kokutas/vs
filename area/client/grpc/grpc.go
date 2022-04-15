@@ -167,9 +167,8 @@ func decodeGetResponse(_ context.Context, reply interface{}) (interface{}, error
 	return endpoint1.GetResponse{
 		Response: &area.GetReply{
 			Reply: &area.Reply{
-				Success: response.Reply.Success,
-				Code:    response.Reply.Code,
-				Reason:  response.Reply.Reason,
+				Code:   response.Reply.Code,
+				Reason: response.Reply.Reason,
 			},
 			Areas: response.Areas,
 		},
