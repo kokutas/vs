@@ -11,7 +11,7 @@ RUN go mod tidy \
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o app ./cmd/main.go
 # FROM --platform=$BUILDPLATFORM alpine:latest
 FROM alpine:latest
-LABEL author="kokutas" email="2150748714@qq.com" logs="v1.0.0" description="logs v1.0.0 by golang v1.8.0 docker image"
+LABEL author="kokutas" email="2150748714@qq.com" logs="v1.0.0" description="area v1.0.0 by golang v1.8.0 docker image"
 USER root
 
 ENV TIME_ZONE=Asia/Shanghai \
