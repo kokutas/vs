@@ -1,5 +1,5 @@
 FROM nginx:alpine
-LABEL author="kokutas" email="2150748714@qq.com" nginx="alpine" description="add time zone based on nginx:alpine"
+LABEL author="kokutas" email="2150748714@qq.com" nginx="alpine" description="add time zone and keepalived based on nginx:alpine"
 USER root
 COPY entrypoint.sh /entrypoint.sh
 ENV TIME_ZONE=Asia/Shanghai 
