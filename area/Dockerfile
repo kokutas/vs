@@ -14,7 +14,7 @@ FROM alpine:latest
 LABEL author="kokutas" email="2150748714@qq.com" logs="v1.0.0" description="area v1.0.0 by golang v1.8.0 docker image"
 USER root
 
-ENV TIME_ZONE=Asia/Shanghai \
+ENV TZ=Asia/Shanghai \
 # 日志文件路径,自动创建目录
 APP_LOG_DIR=/var/app/log \
 # 日志文件前缀
@@ -45,8 +45,8 @@ RUN mkdir -p ${APP_DATA_DIR} ${APP_LOG_DIR} \
 && apk add ca-certificates \
 && rm -rf /var/cache/apk/* \
 && apk add --no-cache bash tzdata \
-&& cp /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
-&& echo ${TIME_ZONE} > /etc/timezone
+&& cp /usr/share/zoneinfo/${TZ} /etc/localtime \
+&& echo ${TZ} > /etc/timezone
 WORKDIR /usr/local/bin
 # 将上一个阶段编译好的二进制文件app复制进来
 COPY --from=builder /workspace/app ./

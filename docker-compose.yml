@@ -1,44 +1,45 @@
-version: "3.8"
+version: "3"
 services:
   api_master:
     build:
       context: $PWD/api
       dockerfile: Dockerfile
     container_name: api_master
-    # ports:
-    #   - 8081:8081
+    privileged: true
     environment:
-      TIME_ZONE: Asia/Shanghai
+      TZ: Asia/Shanghai
       GIN_MODE: release
-      PORT: 8080
+      PORT: 18081
       NAMESPACE: api master gateway
     volumes:
-      - $PWD/data/logs/api/1:/var/api/log
-    networks:
-      - backend
+      - $PWD/data/logs/api/master:/var/api/log
+    network_mode: host
+    ports:
+      - 18081:18081
   
   api_slave:
     build:
       context: $PWD/api
       dockerfile: Dockerfile
     container_name: api_slave
-    # ports:
-    #   - 8082:8082
+    privileged: true
     environment:
-      TIME_ZONE: Asia/Shanghai
+      TZ: Asia/Shanghai
       GIN_MODE: release
-      PORT: 8080
+      PORT: 18082
       NAMESPACE: api slave gateway
     volumes:
       - $PWD/data/logs/api/2:/var/api/log
-    networks:
-      - backend
+    network_mode: host
+    ports:
+      - 18082:18082
 
   nginx_master:
     build:
       context: $PWD/nginx
       dockerfile: Dockerfile
     container_name: nginx_master
+    privileged: true
     volumes:
       - $PWD/data/logs/nginx/master:/var/log/nginx
       - $PWD/nginx/master.html:/usr/share/nginx/html/index.html
@@ -48,18 +49,20 @@ services:
     depends_on:
       - api_master
       - api_slave
-    networks:
-      frontend:
-        ipv4_address: 10.0.0.3
-      backend:
+    network_mode: host
+    ports:
+      - 8081:80
     cap_add: 
       - NET_ADMIN
+      - NET_BROADCAST
+      - NET_RAW
     
   nginx_slave:
     build:
       context: $PWD/nginx
       dockerfile: Dockerfile
     container_name: nginx_slave
+    privileged: true
     volumes:
       - $PWD/data/logs/nginx/slave:/var/log/nginx
       - $PWD/nginx/slave.html:/usr/share/nginx/html/index.html
@@ -69,43 +72,28 @@ services:
     depends_on:
       - api_master
       - api_slave
-    networks:
-      frontend:
-        ipv4_address: 10.0.0.4
-      backend:
+    network_mode: host
+    ports:
+      - 8082:80
     cap_add: 
-        - NET_ADMIN
+      - NET_ADMIN
+      - NET_BROADCAST
+      - NET_RAW
 
   proxy:
     build:
       context: $PWD/haproxy
       dockerfile: Dockerfile
     container_name: haproxy
-    ports:
-      - 8080:80
+    privileged: true
     environment:
-      TIME_ZONE: Asia/Shanghai
+      TZ: Asia/Shanghai
     volumes:
       - $PWD/config/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     depends_on:
       - nginx_master
       - nginx_slave
-    networks:
-      frontend:
-        ipv4_address: 10.0.0.2
+    network_mode: host
+    ports:
+      - 8080:80
 
-networks:
-  frontend:
-    name: frontend
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.0.0.1/24 # 可用地址:254;掩码:255.255.255.0;网络:10.0.0.0;第一个可用:10.0.0.1;最后可用:10.0.0.254;广播:10.0.0.255
-  backend:
-    name: backend
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 11.0.0.0/24
