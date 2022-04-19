@@ -4,16 +4,16 @@
  # @Phone: xxx
  # @Date: 2022-04-16 00:49:07
  # @LastEditors: kokutas
- # @LastEditTime: 2022-04-18 17:58:03
- # @FilePath: /vs/run.sh
+ # @LastEditTime: 2022-04-20 03:52:10
+ # @FilePath: /vs/avc/vs/run.sh
  # @Description: TODO
  # Copyright (c) 2022 by kokutas, All Rights Reserved. 
 ### 
 #!/bin/sh
 set -x
 # 停止服务集群，并删除容器和镜像
-# docker compose down --rmi=all
-docker compose down --rmi=local
+# docker-compose down --rmi=all
+docker-compose down --rmi=local
 # docker: Error response from daemon: failed to create shim: OCI runtime create failed: container_linux.go:380: starting container process caused: exec: "app": executable file not found in $PATH: unknown.
 # fix it
 # test -d <文件>：文件存在且是一个目录
@@ -57,9 +57,9 @@ else
    docker pull haproxy:2.5.5
 fi
 docker-compose build --force-rm --no-cache
-# docker compose up -d
+# docker-compose up -d
 # docker ps -a
-docker compose up
+docker-compose up
 
 # https://unit.nginx.org/configuration/#go
 # docker pull nginx/unit:1.26.1-go1.17
