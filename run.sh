@@ -4,8 +4,8 @@
  # @Phone: xxx
  # @Date: 2022-04-20 11:47:17
  # @LastEditors: kokutas
- # @LastEditTime: 2022-04-20 12:24:23
- # @FilePath: /vs/script/run.sh
+ # @LastEditTime: 2022-04-20 12:39:06
+ # @FilePath: /vs/run.sh
  # @Description: TODO
  # Copyright (c) 2022 by kokutas, All Rights Reserved. 
 ### 
@@ -53,5 +53,9 @@ if test -e "$haproxy_cfg"; then
     fi
 fi
 docker-compose build --force-rm --no-cache
-# docker-compose up -d 
+# docker-compose up -d
+# docker ps -a
 docker-compose up
+
+# https://unit.nginx.org/configuration/#go
+# docker pull nginx/unit:1.26.1-go1.17

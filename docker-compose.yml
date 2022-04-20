@@ -1,17 +1,52 @@
 version: "3.9"
-services:
+  api_master:
+    build:
+      context: $PWD/api
+      dockerfile: Dockerfile
+    container_name: api_master
+    privileged: true
+    environment:
+      TZ: Asia/Shanghai
+      GIN_MODE: release
+      PORT: 18081
+      NAMESPACE: api master gateway
+    volumes:
+      - $PWD/data/logs/api/master:/var/api/log
+    networks:
+      - web_nginx 
+    ports:
+      - 18081:18081
+  
+  api_slave:
+    build:
+      context: $PWD/api
+      dockerfile: Dockerfile
+    container_name: api_slave
+    privileged: true
+    environment:
+      TZ: Asia/Shanghai
+      GIN_MODE: release
+      PORT: 18082
+      NAMESPACE: api slave gateway
+    volumes:
+      - $PWD/data/logs/api/2:/var/api/log
+    networks:
+      - web_nginx 
+    ports:
+      - 18082:18082
+
   nginx_master:
     build:
       context: $PWD/nginx
       dockerfile: Dockerfile
     container_name: nginx_master
+    privileged: true
     volumes:
       - $PWD/data/logs/nginx/master:/var/log/nginx
       - $PWD/nginx/master.html:/usr/share/nginx/html/index.html
       - $PWD/config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - $PWD/config/nginx/api.conf:/etc/nginx/conf.d/api.conf
       - $PWD/config/keepalived/keepalived-master.conf:/etc/keepalived/keepalived.conf
-    privileged: true
     networks:
       - web_nginx 
     ports:
@@ -26,13 +61,13 @@ services:
       context: $PWD/nginx
       dockerfile: Dockerfile
     container_name: nginx_slave
+    privileged: true
     volumes:
       - $PWD/data/logs/nginx/slave:/var/log/nginx
       - $PWD/nginx/slave.html:/usr/share/nginx/html/index.html
       - $PWD/config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - $PWD/config/nginx/api.conf:/etc/nginx/conf.d/api.conf
       - $PWD/config/keepalived/keepalived-slave.conf:/etc/keepalived/keepalived.conf
-    privileged: true
     networks:
       - web_nginx
     ports:
