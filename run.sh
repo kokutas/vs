@@ -4,17 +4,21 @@
  # @Phone: xxx
  # @Date: 2022-04-20 11:47:17
  # @LastEditors: kokutas
- # @LastEditTime: 2022-04-20 12:39:06
+ # @LastEditTime: 2022-04-20 13:08:08
  # @FilePath: /vs/run.sh
  # @Description: TODO
  # Copyright (c) 2022 by kokutas, All Rights Reserved. 
 ### 
 #!/bin/sh
-set -e
+set -x
 # 停止服务集群，并删除容器和镜像
 # docker-compose down --rmi=all
 # 停止服务集群，并删除容器和当前本地创建的镜像
 docker-compose down --rmi=local
+docker pull golang:1.18.0
+docker pull alpine:latest
+docker pull nginx:latest
+docker pull haproxy:2.5.5
 
 # test -e <文件>：文件是否存在
 dockersh=$PWD/script/docker.sh
@@ -23,11 +27,41 @@ if test -e "$dockersh"; then
 else
     echo "Unverified docker and docker-compose versions."
 fi
-imagessh=$PWD/script/images.sh
-if test -e "$imagessh"; then
-    sh $imagessh
+# golang:1.18.0
+golang=$(docker images|grep golang|grep "1.18.0")
+# test -n: 比较字符串的长度是否大于0
+# test -z: 比较字符串的长度是否等于0
+if test -n "$golang" ; then
+    echo $golang
 else
-    echo "No base image pre-pull."
+   docker pull golang:1.18.0
+fi
+# alpine:latest
+alpine=$(docker images|grep alpine|grep latest)
+# test -n: 比较字符串的长度是否大于0
+# test -z: 比较字符串的长度是否等于0
+if test -n "$alpine" ; then
+    echo $alpine
+else
+   docker pull alpine:latest
+fi
+# nginx:latest
+nginx=$(docker images|grep nginx|grep latest)
+# test -n: 比较字符串的长度是否大于0
+# test -z: 比较字符串的长度是否等于0
+if test -n "$nginx" ; then
+    echo $nginx
+else
+   docker pull nginx:latest
+fi
+# haproxy:2.5.5
+haproxy=$(docker images|grep haproxy|grep "2.5.5")
+# test -n: 比较字符串的长度是否大于0
+# test -z: 比较字符串的长度是否等于0
+if test -n "$haproxy" ; then
+    echo $haproxy
+else
+   docker pull haproxy:2.5.5
 fi
 volumesh=$PWD/script/volume.sh
 if test -e "$volumesh"; then
