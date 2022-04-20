@@ -1,3 +1,5 @@
 vendor
 data
 api/vendor
+.DS_Store
+avc
